@@ -13,7 +13,6 @@ let addresses = [
 let addressesapi = [
 	'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressesapi.txt?proxyip=true', 
 	'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressesipv6api.txt', 
-	'https://raw.githubusercontent.com/xianrenqiu120/zijian/refs/heads/main/zijian.txt'
 ];
 
 // 设置优选地址，不带端口号默认80，noTLS订阅生成
