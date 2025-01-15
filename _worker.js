@@ -659,11 +659,10 @@ export default {
 		} else if ((userAgent.includes('sing-box') || userAgent.includes('singbox') || (format === 'singbox' && !userAgent.includes('subconverter'))) && !userAgent.includes('cf-workers-sub')) {
 			if (协议类型 == 'VMess' && url.href.includes('path=')) {
 				const 路径参数前部分 = url.href.split('path=')[0];
-				const 路径参数后部分 = url.href.split('path=')[1].split('&')[1] || '';
+				const parts = url.href.split('path=')[1].split('&');
+				const 路径参数后部分 = parts.slice(1).join('&') || '';
 				const 待处理路径参数 = url.href.split('path=')[1].split('&')[0] || '';
-				if (待处理路径参数.includes('%3F')) {
-					subConverterUrl = generateFakeInfo(路径参数前部分 + 'path=' + 待处理路径参数.split('%3F')[0] + '&' + 路径参数后部分, uuid, host);
-				}
+				if (待处理路径参数.includes('%3F')) subConverterUrl = generateFakeInfo(路径参数前部分 + 'path=' + 待处理路径参数.split('%3F')[0] + '&' + 路径参数后部分, uuid, host);
 			}
 			subConverterUrl = `https://${subConverter}/sub?target=singbox&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=false&new_name=true`;
 		} else {
@@ -693,15 +692,13 @@ export default {
 
 			const newAddressesapi = await 整理优选列表(addressesapi);
 			const newAddressescsv = await 整理测速结果('TRUE');
-			addresses = [...addresses, ...newAddressesapi, ...newAddressescsv];
-			const uniqueAddresses = [...new Set(addresses)];
+			const uniqueAddresses = Array.from(new Set(addresses.concat(newAddressesapi, newAddressescsv)));
 
 			let notlsresponseBody;
 			if ((noTLS == 'true' && 协议类型 == atob(`\u0056\u006b\u0078\u0046\u0055\u0031\u004d\u003d`)) || 协议类型 == 'VMess') {
 				const newAddressesnotlsapi = await 整理优选列表(addressesnotlsapi);
 				const newAddressesnotlscsv = await 整理测速结果('FALSE');
-				addressesnotls = [...addressesnotls, ...newAddressesnotlsapi, ...newAddressesnotlscsv];
-				const uniqueAddressesnotls = [...new Set(addressesnotls)];
+				const uniqueAddressesnotls = Array.from(new Set(addressesnotls.concat(newAddressesnotlsapi, newAddressesnotlscsv)));
 
 				notlsresponseBody = uniqueAddressesnotls.map(address => {
 					let port = "-1";
